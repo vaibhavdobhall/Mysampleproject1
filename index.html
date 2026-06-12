@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SmileCare Dental Clinic</title>
+  <meta name="description" content="Professional dental clinic website with booking form and luxury design." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #020202;
+      --panel: rgba(10, 10, 10, 0.88);
+      --panel-2: rgba(17, 17, 17, 0.95);
+      --gold: #FFD700;
+      --gold-soft: #ffe88a;
+      --white: #f5f7fb;
+      --muted: #cfd5de;
+      --line: rgba(255, 215, 0, 0.16);
+      --shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      color: var(--white);
+      background:
+        radial-gradient(circle at top, rgba(255, 215, 0, 0.06), transparent 22%),
+        radial-gradient(circle at center, rgba(255, 255, 255, 0.03), transparent 18%),
+        linear-gradient(180deg, #010101 0%, #020202 45%, #040404 100%);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255, 215, 0, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 215, 0, 0.02) 1px, transparent 1px);
+      background-size: 24px 24px;
+      mask-image: linear-gradient(to bottom, rgba(0,0,0,0.8), rgba(0,0,0,0.2));
+      pointer-events: none;
+      opacity: 0.45;
+      z-index: -2;
+    }
+
+    a { text-decoration: none; color: inherit; }
+
+    img { max-width: 100%; }
+
+    .container {
+      width: min(1160px, calc(100% - 24px));
+      margin: 0 auto;
+    }
+
+    .glow-text { text-shadow: 0 0 18px rgba(255, 215, 0, 0.35); }
+
+    .gold-btn, .ghost-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      border-radius: 999px;
+      font-weight: 600;
+      border: 1px solid rgba(255, 215, 0, 0.35);
+      box-shadow: 0 0 0 1px rgba(255, 215, 0, 0.08), 0 18px 30px rgba(0,0,0,0.35), 0 0 18px rgba(255, 215, 0, 0.12);
+      transition: transform 0.2s ease, box-shadow 0.3s ease, background 0.3s ease;
+      cursor: pointer;
+    }
+
+    .gold-btn:hover, .ghost-btn:hover { transform: translateY(-2px); }
+
+    .gold-btn {
+      background: linear-gradient(135deg, rgba(255, 215, 0, 0.92), rgba(255, 236, 160, 0.93));
+      color: #111;
+    }
+
+    .ghost-btn {
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--white);
+      backdrop-filter: blur(10px);
+    }
+
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 1px solid rgba(255, 215, 0, 0.08);
+      background: rgba(2, 2, 2, 0.72);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+
+    .nav-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 76px;
+      gap: 16px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--gold);
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: 0.98rem;
+    }
+
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(145deg, rgba(255, 215, 0, 0.14), rgba(255, 255, 255, 0.04));
+      border: 1px solid rgba(255, 215, 0, 0.28);
+      box-shadow: inset 0 0 18px rgba(255, 215, 0, 0.16), 0 0 18px rgba(255, 215, 0, 0.12);
+      font-size: 1.05rem;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      font-weight: 500;
+      font-size: 0.96rem;
+      padding: 8px 10px;
+      border-radius: 999px;
+      transition: color 0.25s ease, background 0.25s ease;
+    }
+
+    .nav-links a:hover { color: var(--gold-soft); background: rgba(255, 215, 0, 0.06); }
+
+    .nav-drop { display: none; }
+
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: grid;
+      align-items: center;
+      overflow: hidden;
+      padding: 36px 0 72px;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      inset: auto auto -10px -10px;
+      width: 30vw;
+      height: 30vw;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 215, 0, 0.12), transparent 55%);
+      filter: blur(30px);
+      z-index: 0;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 30px;
+      align-items: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 215, 0, 0.18);
+      background: rgba(255, 215, 0, 0.06);
+      color: var(--gold-soft);
+      text-transform: uppercase;
+      letter-spacing: 0.22em;
+      font-size: 0.72rem;
+      box-shadow: 0 0 16px rgba(255, 215, 0, 0.08);
+    }
+
+    h1, h2, h3 { font-family: 'Playfair Display', serif; margin: 0; }
+
+    .hero h1 {
+      font-size: clamp(3rem, 8vw, 5rem);
+      line-height: 1.02;
+      margin-top: 18px;
+      max-width: 620px;
+    }
+
+    .hero p.lead {
+      color: var(--muted);
+      font-size: 1.04rem;
+      max-width: 560px;
+      margin: 18px 0 0;
+      line-height: 1.7;
+    }
+
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 28px;
+    }
+
+    .hero .gold-btn {
+      padding: 13px 18px;
+      min-height: 48px;
+      box-shadow: 0 0 0 1px rgba(255, 215, 0, 0.14), 0 18px 30px rgba(0,0,0,0.35), 0 0 28px rgba(255, 215, 0, 0.18);
+    }
+
+    .mini-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 22px;
+    }
+
+    .mini-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 215, 0, 0.12);
+      box-shadow: var(--shadow);
+      color: var(--white);
+      font-size: 0.92rem;
+      backdrop-filter: blur(12px);
+    }
+
+    .hero-card {
+      position: relative;
+      border-radius: 26px;
+      border: 1px solid rgba(255, 215, 0, 0.14);
+      background: linear-gradient(145deg, rgba(8, 8, 8, 0.96), rgba(18, 18, 18, 0.95));
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.55), 0 0 30px rgba(255, 215, 0, 0.08);
+      padding: 18px;
+      overflow: hidden;
+    }
+
+    .hero-card::before,
+    .hero-card::after {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      border-radius: inherit;
+      border: 1px solid rgba(255, 215, 0, 0.12);
+      opacity: 0.55;
+      pointer-events: none;
+    }
+
+    .hero-card::after { inset: auto 20px -10px 20px; height: 42px; filter: blur(18px); background: linear-gradient(180deg, rgba(255, 215, 0, 0.12), transparent); }
+
+    .hero-panel {
+      display: grid;
+      gap: 14px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-panel .panel-box {
+      border-radius: 18px;
+      border: 1px solid rgba(255, 215, 0, 0.16);
+      background: linear-gradient(145deg, rgba(18, 18, 18, 0.98), rgba(8, 8, 8, 0.98));
+      padding: 14px;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02), 0 0 16px rgba(255, 215, 0, 0.08);
+    }
+
+    .time-chip, .clinic-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--gold-soft);
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .clinic-chip { color: var(--white); font-size: 0.92rem; }
+
+    .pulse-ring {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--gold);
+      box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.45);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.35); }
+      70% { box-shadow: 0 0 0 12px rgba(255, 215, 0, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0); }
+    }
+
+    .hero-tiles {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .tile {
+      padding: 12px;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 215, 0, 0.15);
+      background: rgba(255, 255, 255, 0.03);
+      box-shadow: 0 16px 24px rgba(0, 0, 0, 0.35);
+    }
+
+    .tile strong {
+      display: block;
+      font-size: 1.15rem;
+      color: var(--gold-soft);
+      margin-bottom: 4px;
+    }
+
+    .tile span { color: var(--muted); font-size: 0.92rem; }
+
+    .particles {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .particle {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.98), rgba(255, 215, 0, 0.82), rgba(255, 215, 0, 0.08));
+      box-shadow: 0 0 8px rgba(255, 215, 0, 0.45);
+      opacity: 0.7;
+      animation: float 8s linear infinite;
+    }
+
+    @keyframes float { 
+      0% { transform: translateY(0) translateX(0); opacity: 0.2; }
+      40% { opacity: 0.9; }
+      100% { transform: translateY(-110vh) translateX(18px); opacity: 0; }
+    }
+
+    section { padding: 56px 0; }
+
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 22px;
+    }
+
+    .section-head h2 {
+      font-size: clamp(1.8rem, 5vw, 2.5rem);
+      line-height: 1.08;
+      color: var(--white);
+    }
+
+    .section-head p {
+      color: var(--muted);
+      max-width: 620px;
+      line-height: 1.6;
+      font-size: 0.98rem;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .glass-card {
+      position: relative;
+      border-radius: 22px;
+      border: 1px solid rgba(255, 215, 0, 0.12);
+      background: linear-gradient(145deg, rgba(12, 12, 12, 0.96), rgba(8, 8, 8, 0.98));
+      box-shadow: var(--shadow);
+      padding: 18px;
+      overflow: hidden;
+      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+      backdrop-filter: blur(12px);
+    }
+
+    .glass-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(255, 215, 0, 0.45);
+      box-shadow: 0 18px 38px rgba(0, 0, 0, 0.55), 0 0 28px rgba(255, 215, 0, 0.16);
+    }
+
+    .glass-card::after {
+      content: '';
+      position: absolute;
+      inset: auto 12px 10px 12px;
+      height: 16px;
+      border-radius: 16px;
+      background: linear-gradient(180deg, rgba(255, 215, 0, 0.08), transparent);
+      filter: blur(14px);
+      opacity: 0.75;
+    }
+
+    .icon-wrap {
+      width: 54px;
+      height: 54px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      font-size: 1.28rem;
+      background: linear-gradient(145deg, rgba(255, 215, 0, 0.16), rgba(255, 255, 255, 0.04));
+      border: 1px solid rgba(255, 215, 0, 0.24);
+      box-shadow: inset 0 0 14px rgba(255, 215, 0, 0.18), 0 0 14px rgba(255, 215, 0, 0.12);
+      margin-bottom: 12px;
+    }
+
+    .service-card h3 { font-size: 1.18rem; color: var(--white); margin-bottom: 8px; }
+    .service-card p { color: var(--muted); line-height: 1.6; font-size: 0.95rem; }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+    }
+
+    .stat-card {
+      border-radius: 18px;
+      padding: 18px;
+      border: 1px solid rgba(255, 215, 0, 0.12);
+      background: linear-gradient(145deg, rgba(12, 12, 12, 0.96), rgba(6, 6, 6, 0.98));
+      box-shadow: var(--shadow);
+      min-height: 120px;
+    }
+
+    .stat-value {
+      display: block;
+      color: var(--gold);
+      text-shadow: 0 0 18px rgba(255, 215, 0, 0.28);
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4vw, 2.5rem);
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+
+    .stat-label { color: var(--white); font-weight: 600; font-size: 0.98rem; }
+
+    .booking-grid {
+      display: grid;
+      grid-template-columns: 1fr 0.95fr;
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .booking-box, .booking-side {
+      border-radius: 24px;
+      border: 1px solid rgba(255, 215, 0, 0.14);
+      background: linear-gradient(145deg, rgba(10, 10, 10, 0.96), rgba(7, 7, 7, 0.98));
+      box-shadow: var(--shadow);
+      padding: 18px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .booking-box::before,
+    .booking-side::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at top right, rgba(255, 215, 0, 0.08), transparent 28%);
+      pointer-events: none;
+    }
+
+    .booking-side p { color: var(--muted); line-height: 1.6; }
+
+    .info-list { display: grid; gap: 12px; margin-top: 18px; }
+
+    .info-item {
+      display: flex;
+      align-items: start;
+      gap: 12px;
+      padding: 12px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 215, 0, 0.12);
+      color: var(--muted);
+    }
+
+    .info-item strong { color: var(--gold-soft); display: block; margin-bottom: 4px; }
+
+    form { display: grid; gap: 12px; position: relative; z-index: 1; }
+
+    .field-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+
+    label {
+      display: block;
+      color: var(--white);
+      font-size: 0.92rem;
+      margin-bottom: 6px;
+      font-weight: 500;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 215, 0, 0.18);
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--white);
+      padding: 12px 13px;
+      font: inherit;
+      outline: none;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.02);
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: rgba(255, 215, 0, 0.6);
+      box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.12), 0 0 18px rgba(255, 215, 0, 0.08);
+    }
+
+    textarea { min-height: 86px; resize: vertical; }
+
+    .form-note {
+      color: var(--muted);
+      font-size: 0.88rem;
+      line-height: 1.5;
+      margin-top: 2px;
+    }
+
+    .submit-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+
+    .submit-row .gold-btn {
+      padding: 12px 16px;
+      min-height: 46px;
+      border: 1px solid rgba(255, 215, 0, 0.45);
+    }
+
+    .review-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+
+    .quote-card {
+      border-radius: 20px;
+      border: 1px solid rgba(255, 215, 0, 0.15);
+      background: linear-gradient(145deg, rgba(11, 11, 11, 0.98), rgba(8, 8, 8, 0.97));
+      box-shadow: var(--shadow);
+      padding: 18px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .quote-card::before {
+      content: '“';
+      position: absolute;
+      top: -4px;
+      left: 12px;
+      font-size: 4rem;
+      line-height: 1;
+      color: rgba(255, 215, 0, 0.13);
+      font-family: 'Playfair Display', serif;
+    }
+
+    .stars { color: var(--gold); letter-spacing: 0.15em; font-size: 0.98rem; }
+    .reviewer { color: var(--white); font-weight: 700; margin-top: 6px; }
+    .role { color: var(--muted); font-size: 0.9rem; }
+    .quote-card p { color: var(--muted); line-height: 1.65; margin-top: 10px; }
+
+    footer {
+      padding: 28px 0 42px;
+      border-top: 1px solid rgba(255, 215, 0, 0.12);
+      background: linear-gradient(180deg, rgba(2,2,2,0), rgba(3,3,3,0.9));
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr 0.95fr;
+      gap: 18px;
+    }
+
+    .footer-card {
+      border-radius: 18px;
+      border: 1px solid rgba(255, 215, 0, 0.12);
+      background: linear-gradient(145deg, rgba(10, 10, 10, 0.96), rgba(7, 7, 7, 0.98));
+      box-shadow: var(--shadow);
+      padding: 14px;
+    }
+
+    .footer-card h3 { font-size: 1.1rem; margin-bottom: 8px; color: var(--gold-soft); }
+    .footer-card p, .footer-card li { color: var(--muted); line-height: 1.6; font-size: 0.95rem; }
+    .footer-links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 8px; }
+    .footer-links a {
+      width: 36px; height: 36px; border-radius: 50%;
+      display: grid; place-items: center;
+      border: 1px solid rgba(255, 215, 0, 0.18);
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--white);
+      box-shadow: 0 0 14px rgba(255, 215, 0, 0.08);
+    }
+
+    .fade-up {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .fade-up.in-view { opacity: 1; transform: translateY(0); }
+
+    .success-popup {
+      position: fixed;
+      inset: auto 16px 16px auto;
+      z-index: 250;
+      background: linear-gradient(145deg, rgba(18, 18, 18, 0.98), rgba(10, 10, 10, 0.98));
+      border: 1px solid rgba(255, 215, 0, 0.35);
+      color: var(--white);
+      border-radius: 14px;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45), 0 0 18px rgba(255, 215, 0, 0.12);
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transform: translateY(20px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease, transform 0.25s ease;
+      max-width: 360px;
+    }
+
+    .success-popup.show { opacity: 1; transform: translateY(0); }
+
+    .popup-icon { color: var(--gold); font-size: 1.1rem; text-shadow: 0 0 8px rgba(255, 215, 0, 0.35); }
+
+    @media (max-width: 1080px) {
+      .hero-grid, .booking-grid, .footer-grid { grid-template-columns: 1fr; }
+      .card-grid, .review-grid { grid-template-columns: repeat(2, 1fr); }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 860px) {
+      .nav-links { display: none; }
+      .nav-drop { display: inline-flex; }
+      .card-grid, .review-grid, .stats-grid { grid-template-columns: 1fr; }
+      .field-grid { grid-template-columns: 1fr; }
+      .hero { min-height: auto; padding-top: 26px; }
+      .hero h1 { max-width: none; }
+    }
+
+    @media (max-width: 640px) {
+      .nav-wrap { min-height: 68px; }
+      .brand { font-size: 0.88rem; }
+      .hero-actions, .submit-row { flex-direction: column; align-items: stretch; }
+      .gold-btn, .ghost-btn { width: 100%; }
+      .hero-card { padding: 14px; }
+      .hero-tiles { grid-template-columns: 1fr; }
+      .section-head { align-items: flex-start; flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container nav-wrap">
+      <a href="#home" class="brand" aria-label="SmileCare Dental Clinic home">
+        <span class="brand-mark">🦷</span>
+        <span>SmileCare Dental Clinic</span>
+      </a>
+      <div class="nav-links">
+        <a href="#services">Services</a>
+        <a href="#why-us">Why Choose Us</a>
+        <a href="#booking">Book</a>
+        <a href="#testimonials">Reviews</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <a class="gold-btn nav-drop" href="#booking">Book Now</a>
+    </div>
+  </nav>
+
+  <header class="hero" id="home">
+    <div class="particles" id="particles" aria-hidden="true"></div>
+    <div class="container hero-grid">
+      <article class="fade-up">
+        <span class="eyebrow glow-text">Luxury dental care • premium comfort</span>
+        <h1 class="glow-text">Your Perfect Smile Starts Here</h1>
+        <p class="lead">Advanced cosmetic, restorative, and preventive care in a serene clinic designed for comfort, precision, and confidence. Experience a brighter smile with expert specialists and gentle treatment.</p>
+        <div class="hero-actions">
+          <a class="gold-btn" href="#booking">Book Appointment Now</a>
+          <a class="ghost-btn" href="#services">Explore Services</a>
+        </div>
+        <div class="mini-badges">
+          <span class="mini-badge">🦷 Modern Implantology</span>
+          <span class="mini-badge">✨ Cosmetic Excellence</span>
+          <span class="mini-badge">🌙 Evening Appointments</span>
+        </div>
+      </article>
+
+      <aside class="hero-card fade-up" style="animation-delay: 80ms;">
+        <div class="hero-panel">
+          <div class="panel-box">
+            <div class="time-chip"><span class="pulse-ring"></span> Open Today • 9:00 AM – 7:00 PM</div>
+            <div class="clinic-chip" style="margin-top: 8px;">Premium care for families, professionals, and smile makeovers</div>
+          </div>
+          <div class="hero-tiles">
+            <div class="tile"><strong>98.7%</strong><span>Patient satisfaction</span></div>
+            <div class="tile"><strong>4.9/5</strong><span>Average review score</span></div>
+            <div class="tile"><strong>Same-Day</strong><span>Emergency triage</span></div>
+            <div class="tile"><strong>Digital X-ray</strong><span>Precision diagnostics</span></div>
+          </div>
+          <div class="panel-box">
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:8px; color:var(--gold-soft); font-weight:600;">Today’s highlight <span style="color:var(--white); font-size:0.9rem;">Whitening + consultation</span></div>
+            <p style="color:var(--muted); line-height:1.5; margin:8px 0 0; font-size:0.92rem;">Book a smile consultation with our specialists and receive a tailored cosmetic plan in under 30 minutes.</p>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </header>
+
+  <main>
+    <section id="services">
+      <div class="container">
+        <div class="section-head fade-up">
+          <div>
+            <span class="eyebrow glow-text">Our services</span>
+            <h2>Comprehensive care, crafted to perfection</h2>
+          </div>
+          <p>From routine care to advanced smile design, our team blends clinical excellence with a calm, luxurious environment to deliver results you can trust.</p>
+        </div>
+        <div class="card-grid">
+          <article class="glass-card service-card fade-up"><div class="icon-wrap">✨</div><h3>Teeth Whitening</h3><p>Safe, professional whitening for a brighter, more confident smile with minimal sensitivity.</p></article>
+          <article class="glass-card service-card fade-up" style="animation-delay: 60ms;"><div class="icon-wrap">🦷</div><h3>Dental Implants</h3><p>Precision implant placement for durable, natural-looking replacement teeth and long-term comfort.</p></article>
+          <article class="glass-card service-card fade-up" style="animation-delay: 120ms;"><div class="icon-wrap">📐</div><h3>Braces & Aligners</h3><p>Clear aligners and orthodontic solutions that gently guide you to a straight, healthy smile.</p></article>
+          <article class="glass-card service-card fade-up" style="animation-delay: 180ms;"><div class="icon-wrap">🫧</div><h3>Root Canal</h3><p>Painless root canal therapy using gentle techniques to relieve discomfort and save your tooth.</p></article>
+          <article class="glass-card service-card fade-up" style="animation-delay: 240ms;"><div class="icon-wrap">🧼</div><h3>Teeth Cleaning</h3><p>Deep professional cleaning to remove plaque, brighten enamel, and protect your gum health.</p></article>
+          <article class="glass-card service-card fade-up" style="animation-delay: 300ms;"><div class="icon-wrap">🚑</div><h3>Emergency Care</h3><p>Quick relief for sudden pain, chipped teeth, swelling, and urgent dental issues when you need it most.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="why-us">
+      <div class="container">
+        <div class="section-head fade-up">
+          <div>
+            <span class="eyebrow glow-text">Why choose us</span>
+            <h2>Trusted by thousands for advanced, painless care</h2>
+          </div>
+          <p>Our clinic combines elite specialists, modern diagnostics, and a serene environment to make every visit feel polished, reassuring, and efficient.</p>
+        </div>
+        <div class="stats-grid">
+          <article class="stat-card fade-up"><span class="stat-value">5000+</span><span class="stat-label">Patients</span></article>
+          <article class="stat-card fade-up" style="animation-delay: 70ms;"><span class="stat-value">15+ Years</span><span class="stat-label">Experience</span></article>
+          <article class="stat-card fade-up" style="animation-delay: 140ms;"><span class="stat-value">20</span><span class="stat-label">Specialists</span></article>
+          <article class="stat-card fade-up" style="animation-delay: 210ms;"><span class="stat-value">100%</span><span class="stat-label">Painless Treatment</span></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="booking">
+      <div class="container">
+        <div class="section-head fade-up">
+          <div>
+            <span class="eyebrow glow-text">Book an appointment</span>
+            <h2>Request your visit and we’ll confirm it promptly</h2>
+          </div>
+          <p>Share your preferred service and timing; we’ll open your appointment request directly on WhatsApp with all your details pre-filled.</p>
+        </div>
+        <div class="booking-grid">
+          <article class="booking-box fade-up">
+            <form id="bookingForm" novalidate>
+              <div class="field-grid">
+                <div>
+                  <label for="name">Full Name</label>
+                  <input id="name" name="name" type="text" placeholder="Enter your full name" required />
+                </div>
+                <div>
+                  <label for="phone">Phone Number</label>
+                  <input id="phone" name="phone" type="tel" placeholder="e.g. 7302519340" required />
+                </div>
+              </div>
+              <div class="field-grid">
+                <div>
+                  <label for="email">Email</label>
+                  <input id="email" name="email" type="email" placeholder="name@example.com" required />
+                </div>
+                <div>
+                  <label for="service">Service Needed</label>
+                  <select id="service" name="service" required>
+                    <option value="">Select a service</option>
+                    <option>Teeth Whitening</option>
+                    <option>Dental Implants</option>
+                    <option>Braces & Aligners</option>
+                    <option>Root Canal</option>
+                    <option>Teeth Cleaning</option>
+                    <option>Emergency Care</option>
+                  </select>
+                </div>
+              </div>
+              <div class="field-grid">
+                <div>
+                  <label for="date">Preferred Date</label>
+                  <input id="date" name="date" type="date" required />
+                </div>
+                <div>
+                  <label for="time">Preferred Time</label>
+                  <input id="time" name="time" type="time" required />
+                </div>
+              </div>
+              <div>
+                <label for="message">Message / Symptoms</label>
+                <textarea id="message" name="message" placeholder="Tell us how we can assist you today"></textarea>
+              </div>
+              <div class="submit-row">
+                <button class="gold-btn" type="submit">Send Appointment Request</button>
+                <span class="form-note">We will redirect you to WhatsApp with your details ready to send.</span>
+              </div>
+            </form>
+          </article>
+          <aside class="booking-side fade-up" style="animation-delay: 90ms;">
+            <h3 style="font-size: 1.35rem; color: var(--white); margin-bottom: 8px;">Why patients love our booking process</h3>
+            <p>Simple, secure, and fast. Share your needs, and our team receives your consultation request instantly with all details pre-filled for a smoother response.</p>
+            <div class="info-list">
+              <div class="info-item"><div style="font-size: 1.1rem; color: var(--gold);">📍</div><div><strong>Address</strong> 18 Gold Avenue, Downtown Medical District, New Delhi</div></div>
+              <div class="info-item"><div style="font-size: 1.1rem; color: var(--gold);">📞</div><div><strong>Phone</strong> +91 73025 19340</div></div>
+              <div class="info-item"><div style="font-size: 1.1rem; color: var(--gold);">✉️</div><div><strong>Email</strong> hello@smilecareclinic.com</div></div>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section id="testimonials">
+      <div class="container">
+        <div class="section-head fade-up">
+          <div>
+            <span class="eyebrow glow-text">Patient reviews</span>
+            <h2>What our patients say about their experience</h2>
+          </div>
+          <p>From precise treatments to a calming clinic atmosphere, our patients consistently describe their visits as professional, comfortable, and confidence-boosting.</p>
+        </div>
+        <div class="review-grid">
+          <article class="quote-card fade-up"><div class="stars">★★★★★</div><p>“The team was incredibly gentle and the clinic feels luxurious. My whitening treatment looked stunning and the process was painless.”</p><div class="reviewer">Ananya R.</div><div class="role">Teeth Whitening Patient</div></article>
+          <article class="quote-card fade-up" style="animation-delay: 80ms;"><div class="stars">★★★★★</div><p>“I had an implant done here and the care was professional from consultation to follow-up. The level of detail is exceptional.”</p><div class="reviewer">Arjun S.</div><div class="role">Implant Patient</div></article>
+          <article class="quote-card fade-up" style="animation-delay: 160ms;"><div class="stars">★★★★★</div><p>“Friendly specialists, clear explanations, and a very calm environment. It feels like premium care with total trust.”</p><div class="reviewer">Priya K.</div><div class="role">Orthodontic Care</div></article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer id="contact">
+    <div class="container footer-grid">
+      <article class="footer-card fade-up">
+        <h3>SmileCare Dental Clinic</h3>
+        <p>Luxury dentistry, precise treatments, and a patient-first approach designed to elevate every visit.</p>
+      </article>
+      <article class="footer-card fade-up" style="animation-delay: 80ms;">
+        <h3>Contact</h3>
+        <p>18 Gold Avenue, Downtown Medical District<br />New Delhi, India</p>
+        <p>Phone: +91 73025 19340<br />Email: hello@smilecareclinic.com</p>
+      </article>
+      <article class="footer-card fade-up" style="animation-delay: 160ms;">
+        <h3>Follow</h3>
+        <div class="footer-links">
+          <a href="#" aria-label="Instagram">📸</a>
+          <a href="#" aria-label="Facebook">👍</a>
+          <a href="#" aria-label="WhatsApp">💬</a>
+          <a href="#" aria-label="LinkedIn">🔗</a>
+        </div>
+        <p style="margin-top: 10px;">© 2026 SmileCare Dental Clinic. All rights reserved.</p>
+      </article>
+    </div>
+  </footer>
+
+  <div class="success-popup" id="successPopup" role="status" aria-live="polite">
+    <span class="popup-icon">✨</span>
+    <span>Your appointment request has been sent!</span>
+  </div>
+
+  <script>
+    const particleLayer = document.getElementById('particles');
+    const count = 26;
+    for (let i = 0; i < count; i++) {
+      const p = document.createElement('span');
+      p.className = 'particle';
+      p.style.left = Math.random() * 100 + '%';
+      p.style.top = Math.random() * 100 + '%';
+      p.style.animationDuration = (6 + Math.random() * 6) + 's';
+      p.style.animationDelay = (Math.random() * 3) + 's';
+      p.style.opacity = (0.25 + Math.random() * 0.6).toString();
+      particleLayer.appendChild(p);
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('in-view');
+      });
+    }, { threshold: 0.15 });
+
+    document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+    const form = document.getElementById('bookingForm');
+    const popup = document.getElementById('successPopup');
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const data = new FormData(form);
+      const name = data.get('name')?.trim() || 'N/A';
+      const phone = data.get('phone')?.trim() || 'N/A';
+      const email = data.get('email')?.trim() || 'N/A';
+      const service = data.get('service')?.trim() || 'N/A';
+      const date = data.get('date')?.trim() || 'N/A';
+      const time = data.get('time')?.trim() || 'N/A';
+      const message = data.get('message')?.trim() || 'No additional details provided.';
+
+      const text = [
+        'New Appointment Request:',
+        'Name: ' + name,
+        'Phone: ' + phone,
+        'Email: ' + email,
+        'Service: ' + service,
+        'Date: ' + date,
+        'Time: ' + time,
+        'Message: ' + message
+      ].join('\n');
+
+      popup.classList.add('show');
+      setTimeout(() => {
+        popup.classList.remove('show');
+      }, 1800);
+
+      setTimeout(() => {
+        window.location.href = 'https://wa.me/917302519340?text=' + encodeURIComponent(text);
+      }, 700);
+    });
+  </script>
+</body>
+</html>
